@@ -10,9 +10,19 @@ module.exports = {
             client.query('SELECT * FROM types;', (err, result) => {
                 if (err) return res.status(500).send({err});
 
-                res.status(200).send({
-                    response: result.rows
-                });
+                const response = {
+                    amount: result.rowCount,
+                    types: result.rows.map(row => ({
+                        id: row.id,
+                        name: row.name,
+                        request: {
+                            type: 'GET',
+                            description: 'Retorna todos os tipos.'
+                        }
+                    }))
+                }
+
+                res.status(200).send(response);
 
             })
 
@@ -32,16 +42,22 @@ module.exports = {
             client.query(query, (err, result) => {
                 if (err) return res.status(500).send({err});
 
-                res.status(201).send({
-                    response: result.rows
-                });
+                const response = {
+                    message: "Tipo criado com sucesso!",
+                    request: {
+                        type: 'POST',
+                        description: 'Cria um tipo.'
+                    }
+                }
+
+                res.status(201).send(response);
 
             })
 
         });
     },
 
-    show: async  (req, res) => {
+    show: async (req, res) => {
         await pg.connect((err, client) => {
 
             if (err) return res.status(500).send({err});
@@ -55,9 +71,20 @@ module.exports = {
             client.query(query, (err, result) => {
                 if (err) return res.status(500).send({err});
 
-                res.status(200).send({
-                    response: result.rows[0]
+                if (result.rows.length === 0) res.status(404).send({
+                    message: "Item não encontrado!"
                 });
+
+                const response = {
+                    id: result.rows[0].id,
+                    name: result.rows[0].name,
+                    request: {
+                        type: 'GET',
+                        description: 'Retorna um tipo específico.'
+                    }
+                }
+
+                res.status(200).send(response);
 
             })
         });
@@ -77,9 +104,15 @@ module.exports = {
             client.query(query, (err, result) => {
                 if (err) return res.status(500).send({err});
 
-                res.status(200).send({
-                    message: 'Tipo atualizado com sucesso!'
-                });
+                const response = {
+                    message: "Tipo atualizado com sucesso!",
+                    request: {
+                        type: 'PATCH',
+                        description: 'Atualiza um tipo.'
+                    }
+                }
+
+                res.status(200).send(response);
 
             })
         });
@@ -99,9 +132,15 @@ module.exports = {
             client.query(query, (err, result) => {
                 if (err) return res.status(500).send({err});
 
-                res.status(200).send({
-                    message: 'Tipo excluido com sucesso!'
-                });
+                const response = {
+                    message: "Tipo excluído com sucesso!",
+                    request: {
+                        type: 'DELETE',
+                        description: 'Exclue um tipo.'
+                    }
+                }
+
+                res.status(200).send(response);
 
             })
         });

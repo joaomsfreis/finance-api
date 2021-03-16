@@ -12,9 +12,19 @@ module.exports = {
 
                 if (err) return res.status(500).send({err});
 
-                res.status(200).send({
-                    response: result.rows
-                });
+                const response = {
+                    amount: result.rowCount,
+                    transactions: result.rows.map(row => {
+                        row.request = {
+                            type: 'GET',
+                            description: 'Retorna todos as transações.'
+                        };
+
+                        return row;
+                    })
+                }
+
+                res.status(200).send(response);
 
             })
 
@@ -34,9 +44,15 @@ module.exports = {
             client.query(query, (err, result) => {
                 if (err) return res.status(500).send({err});
 
-                res.status(201).send({
-                    message: 'Transação cadastrada com sucesso!'
-                });
+                const response = {
+                    message: "Transação criada com sucesso!",
+                    request: {
+                        type: 'POST',
+                        description: 'Cria uma transação.'
+                    }
+                }
+
+                res.status(201).send(response);
 
             })
 
@@ -58,9 +74,18 @@ module.exports = {
             client.query(query, (err, result) => {
                 if (err) return res.status(500).send({err});
 
-                res.status(200).send({
-                    response: result.rows[0]
+                if (result.rows.length === 0) res.status(404).send({
+                    message: "Item não encontrado!"
                 });
+
+                result.rows[0].request = {
+                    type: 'GET',
+                    description: 'Retorna uma transação específica.'
+                }
+
+                const response = result.rows[0];
+
+                res.status(200).send(response);
 
             })
         });
@@ -80,9 +105,15 @@ module.exports = {
             client.query(query, (err, result) => {
                 if (err) return res.status(500).send({err});
 
-                res.status(200).send({
-                    message: 'Transação atualizado com sucesso!'
-                });
+                const response = {
+                    message: "Transação atualizada com sucesso!",
+                    request: {
+                        type: 'PATCH',
+                        description: 'Atualiza uma transação.'
+                    }
+                }
+
+                res.status(200).send(response);
 
             })
         });
@@ -102,9 +133,16 @@ module.exports = {
             client.query(query, (err, result) => {
                 if (err) return res.status(500).send({err});
 
-                res.status(200).send({
-                    message: 'Transação excluido com sucesso!'
-                });
+
+                const response = {
+                    message: "Transação excluída com sucesso!",
+                    request: {
+                        type: 'DELETE',
+                        description: 'Exclue um transação.'
+                    }
+                }
+
+                res.status(200).send(response);
 
             })
         });
