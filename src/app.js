@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 const transactionsRoute = require('./routes/transactions');
 const typesRoute = require('./routes/types');
+const usersRoute = require('./routes/users');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 
 app.use('/transactions', transactionsRoute);
 app.use('/types', typesRoute);
+app.use('/users', usersRoute);
 
 app.use((req, res, next) => {
     const erro = new Error('Não encontrado.');
