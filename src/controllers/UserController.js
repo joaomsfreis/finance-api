@@ -43,12 +43,10 @@ module.exports = {
                             }
 
                             return res.status(201).send(response);
-                            client.end();
                         })
                     });
                 }
 
-                client.end();
             })
         });
     },
@@ -99,7 +97,7 @@ module.exports = {
                         });
                     });
                 }
-                client.end();
+
             })
         });
     },

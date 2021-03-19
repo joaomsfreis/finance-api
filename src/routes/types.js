@@ -1,15 +1,16 @@
 const TypeController = require('../controllers/TypeController');
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
 
-router.get('/', TypeController.index);
+router.get('/', auth, TypeController.index);
 
-router.post('/', TypeController.store);
+router.post('/', auth, TypeController.store);
 
-router.get('/:id', TypeController.show);
+router.get('/:id', auth, TypeController.show);
 
-router.patch('/', TypeController.update);
+router.patch('/', auth, TypeController.update);
 
-router.delete('/', TypeController.delete);
+router.delete('/', auth, TypeController.delete);
 
 module.exports = router;

@@ -71,7 +71,7 @@ module.exports = {
             client.query(query, (err, result) => {
                 if (err) return res.status(500).send({err});
 
-                if (result.rows.length === 0) res.status(404).send({
+                if (result.rows.length === 0) return res.status(404).send({
                     message: "Item não encontrado!"
                 });
 
