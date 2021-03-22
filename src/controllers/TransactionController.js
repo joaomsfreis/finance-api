@@ -7,9 +7,15 @@ module.exports = {
 
             if (err) return res.status(500).send({err});
 
-            client.query('SELECT transactions.*, types.name as type FROM transactions ' +
-                'INNER JOIN types ON transactions.type_id = types.id;', (err, result) => {
 
+            const query = {
+                text: 'SELECT transactions.*, types.name as type FROM transactions ' +
+                    'INNER JOIN types ON transactions.type_id = types.id WHERE transactions.user_id = $1',
+                values: [req.params.user_id],
+            }
+
+            client.query(query, (err, result) => {
+                console.log(err);
                 if (err) return res.status(500).send({err});
 
                 const response = {
@@ -37,8 +43,8 @@ module.exports = {
             if (err) return res.status(500).send({err});
 
             const query = {
-                text: 'INSERT INTO transactions (id, type_id, value, description, date) VALUES($1, $2, $3, $4, $5)',
-                values: [uuidv4(), req.body.type_id, req.body.value, req.body.description, req.body.date],
+                text: 'INSERT INTO transactions (id, type_id, user_id, value, description, date) VALUES($1, $2, $3, $4, $5, $6)',
+                values: [uuidv4(), req.body.type_id, req.body.user_id, req.body.value, req.body.description, req.body.date],
             }
 
             client.query(query, (err, result) => {
@@ -66,8 +72,8 @@ module.exports = {
 
             const query = {
                 text: 'SELECT transactions.*, types.name as type FROM transactions ' +
-                    'INNER JOIN types ON transactions.type_id = types.id WHERE transactions.id = $1',
-                values: [req.params.id],
+                    'INNER JOIN types ON transactions.type_id = types.id WHERE transactions.id = $1 AND transactions.user_id = $2',
+                values: [req.params.id, req.params.user_id],
             }
 
 
@@ -97,8 +103,8 @@ module.exports = {
             if (err) return res.status(500).send({err});
 
             const query = {
-                text: 'UPDATE transactions SET type_id = $1, value = $2, description = $3, date = $4  WHERE id = $5',
-                values: [ req.body.type_id, req.body.value, req.body.description, req.body.date, req.body.id],
+                text: 'UPDATE transactions SET type_id = $1, user_id = $2, value = $3, description = $4, date = $5  WHERE id = $6',
+                values: [ req.body.type_id, req.body.user_id, req.body.value, req.body.description, req.body.date, req.body.id],
             }
 
 

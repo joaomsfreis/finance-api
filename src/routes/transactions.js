@@ -3,11 +3,11 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 
-router.get('/', auth, TransactionController.index);
+router.get('/:user_id', auth, TransactionController.index);
 
 router.post('/', auth, TransactionController.store);
 
-router.get('/:id', auth, TransactionController.show);
+router.get('/:user_id/:id', auth, TransactionController.show);
 
 router.patch('/', auth, TransactionController.update);
 

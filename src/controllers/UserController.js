@@ -88,6 +88,7 @@ module.exports = {
                             );
                             return res.status(200).send({
                                 message: "Autenticado com sucesso!",
+                                user_id: result.rows[0].id,
                                 token
                             });
                         }
