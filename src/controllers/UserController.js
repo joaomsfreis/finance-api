@@ -16,6 +16,7 @@ module.exports = {
 
 
             client.query(query, (err, result) => {
+                console.log(err);
                 if (err) return res.status(500).send({err});
 
                 if (result.rows.length > 0) {
