@@ -6,8 +6,7 @@ const jwt = require('jsonwebtoken');
 module.exports = {
     register: async (req, res) => {
         await pg.connect((err, client) => {
-
-            if (err) return res.status(500).send({err});
+            if (err) return res.status(500).send(err);
 
             const query = {
                 text: 'SELECT * FROM users WHERE email = $1',
@@ -16,8 +15,7 @@ module.exports = {
 
 
             client.query(query, (err, result) => {
-                console.log(err);
-                if (err) return res.status(500).send({err});
+                if (err) return res.status(500).send(err);
 
                 if (result.rows.length > 0) {
                     return res.status(409).send({
@@ -33,7 +31,7 @@ module.exports = {
                         }
 
                         client.query(query, (err, result) => {
-                            if (err) return res.status(500).send({err});
+                            if (err) return res.status(500).send(err);
 
                             const response = {
                                 message: "Usuário cadastrado com sucesso!",
