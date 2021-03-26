@@ -1,6 +1,7 @@
 const express = require('express');
-const app = express();
 const morgan = require('morgan');
+const cors = require('cors');
+const app = express();
 const bodyParser = require('body-parser');
 
 const transactionsRoute = require('./routes/transactions');
@@ -11,17 +12,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Header', 'Origin, X-Request-With, Content-Type, Accept, Authorization');
-
-    if(req.method === 'OPITIONS') {
-        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-        return res.status(200).send({});
-    }
-
-    next();
-});
+app.use(cors());
 
 app.use('/transactions', transactionsRoute);
 app.use('/types', typesRoute);

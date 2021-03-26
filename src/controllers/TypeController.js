@@ -4,7 +4,6 @@ const {v4: uuidv4} = require('uuid');
 module.exports = {
     index: async (req, res) => {
         await pg.connect((err, client) => {
-
             if (err) return res.status(500).send({err});
 
             client.query('SELECT * FROM types;', (err, result) => {
