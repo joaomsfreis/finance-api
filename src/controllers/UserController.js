@@ -102,4 +102,21 @@ module.exports = {
         });
     },
 
+    auth: async (req, res) => {
+        try {
+            const token = req.body.token;
+
+            const decode = jwt.verify(token, process.env.JWT_KEY);
+            return res.status(200).send({
+                message: 'Tudo certo!',
+                auth: true
+            })
+        } catch (err) {
+            return res.status(401).send({
+                message: 'Falha na autenticação!',
+                auth: false
+            })
+        }
+    },
+
 }
